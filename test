@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wardrobe Lookbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .outfit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #f3f4f6;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: white;
+            color: #374151;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab-btn:hover {
+            background: #f9fafb;
+        }
+        .tab-btn.active {
+            background: #9333ea;
+            color: white;
+            box-shadow: 0 4px 6px rgba(147,51,234,0.3);
+        }
+        .download-btn {
+            background: #9333ea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(147,51,234,0.3);
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background: #7e22ce;
+        }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+        .grid-8 { display: grid; grid-template-columns: repeat(8, 1fr); gap: 24px; }
+        @media (max-width: 768px) {
+            .grid-3, .grid-4, .grid-5, .grid-8 { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+    <div id="app" class="p-6">
+        <div style="max-width: 1280px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 36px; font-weight: bold; color: #111827; margin-bottom: 8px;">Your Complete Lookbook</h1>
+                <p style="color: #6b7280; margin-bottom: 16px;">Curated color palette & outfit combinations</p>
+                <button class="download-btn" onclick="downloadGuide()">⬇️ Download Style Guide</button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; justify-content: center;" id="tabs">
+                <button class="tab-btn active" onclick="showTab('palette')">🎨 Color Palette</button>
+                <button class="tab-btn" onclick="showTab('casual')">👕 Casual</button>
+                <button class="tab-btn" onclick="showTab('business')">💼 Business Casual</button>
+                <button class="tab-btn" onclick="showTab('formal')">🏆 Formal</button>
+                <button class="tab-btn" onclick="showTab('winter')">❄️ Winter</button>
+                <button class="tab-btn" onclick="showTab('summer')">☀️ Summer</button>
+            </div>
+
+            <div style="background: white; border-radius: 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); padding: 32px;">
+                <div id="content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colorPalette = {
+            neutrals: [
+                { name: 'Black', hex: '#1A1A1A' },
+                { name: 'Charcoal', hex: '#2F2F2F' },
+                { name: 'Dark Brown', hex: '#3B2F2F' },
+                { name: 'Navy', hex: '#0A2342' },
+                { name: 'Deep Navy', hex: '#0D1B2A' },
+                { name: 'Cream', hex: '#F5F0E6' },
+                { name: 'White', hex: '#FFFFFF' },
+                { name: 'Light Beige', hex: '#E8DCC3' }
+            ],
+            accents: [
+                { name: 'Olive', hex: '#556B2F' },
+                { name: 'Rust', hex: '#B7410E' },
+                { name: 'Sage Green', hex: '#9BAE91' },
+                { name: 'Dusty Rose', hex: '#D8A39D' },
+                { name: 'Burgundy', hex: '#800020' },
+                { name: 'Deep Burgundy', hex: '#750015' },
+                { name: 'Camel', hex: '#C19A6B' },
+                { name: 'Deep Denim', hex: '#1E3A5F' },
+                { name: 'Soft Blue', hex: '#B7CFEA' }
+            ]
+        };
+
+        const outfits = {
+            casual: [
+                { name: 'Olive + Cream (Warm & Trendy)', colors: ['#556B2F', '#F5F0E6'], pieces: ['Olive tee/hoodie', 'Cream/beige pants'], vibe: '🔥 Gen-Z clean aesthetic' },
+                { name: 'Rust + Dark Denim (Warm Pop)', colors: ['#B7410E', '#1E3A5F'], pieces: ['Rust t-shirt', 'Dark blue jeans'], vibe: '🔥 Bold and masculine' },
+                { name: 'Sage Green + Light Beige (Soft)', colors: ['#9BAE91', '#E8DCC3'], pieces: ['Sage shirt', 'Light beige chinos'], vibe: '🔥 Soft, aesthetic vibes' },
+                { name: 'Navy + Charcoal (Clean)', colors: ['#0A2342', '#2F2F2F'], pieces: ['Navy sweatshirt', 'Charcoal joggers'], vibe: '🔥 Minimal and sharp' },
+                { name: 'Dusty Rose + Black (Modern)', colors: ['#D8A39D', '#1A1A1A'], pieces: ['Dusty rose tee', 'Black jeans'], vibe: '🔥 Modern edge' }
+            ],
+            business: [
+                { name: 'Navy Blazer + Cream Chinos', colors: ['#0D1B2A', '#F5EBDD', '#556B2F'], pieces: ['Navy blazer', 'Cream shirt', 'Olive chinos'], vibe: '🔥 Professional warmth' },
+                { name: 'Camel Blazer + Navy Pants', colors: ['#C19A6B', '#FFFFFF', '#0A2342'], pieces: ['Camel blazer', 'White shirt', 'Navy pants'], vibe: '🔥 Premium and elegant' },
+                { name: 'Charcoal + Light Blue', colors: ['#2B2B2B', '#B7CFEA'], pieces: ['Charcoal blazer', 'Soft blue shirt', 'Charcoal pants'], vibe: '🔥 CEO energy' }
+            ],
+            formal: [
+                { name: 'Navy Suit + Cream Shirt', colors: ['#0D1B2A', '#F5EBDD', '#800020'], pieces: ['Navy suit', 'Cream shirt', 'Burgundy tie'], vibe: '🔥 Skin glow + dark hair contrast' },
+                { name: 'Charcoal Suit + Light Blue', colors: ['#2B2B2B', '#B7CFEA', '#0A2342'], pieces: ['Charcoal suit', 'Soft blue shirt', 'Navy tie'], vibe: '🔥 Powerful CEO vibes' },
+                { name: 'Camel Blazer + Navy Pants', colors: ['#C19A6B', '#FFFFFF', '#0A2342'], pieces: ['Camel blazer', 'White shirt', 'Navy pants'], vibe: '🔥 Warm skin tone perfection' },
+                { name: 'Dark Brown Suit + Cream', colors: ['#3B2F2F', '#F7F3E9', '#556B2F'], pieces: ['Dark brown suit', 'Cream shirt', 'Olive tie'], vibe: '🔥 Rich and rare combo' },
+                { name: 'Black Suit + Charcoal Shirt', colors: ['#1A1A1A', '#2F2F2F', '#750015'], pieces: ['Black suit', 'Charcoal shirt', 'Burgundy tie'], vibe: '🔥 Bold masculine power' }
+            ],
+            winter: [
+                { name: 'Navy Overcoat + Charcoal', colors: ['#0D1B2A', '#2F2F2F', '#F5F0E6'], pieces: ['Navy overcoat', 'Charcoal sweater', 'Cream scarf'], vibe: '❄️ Classic winter elegance' },
+                { name: 'Dark Brown + Olive Layers', colors: ['#3B2F2F', '#556B2F', '#E8DCC3'], pieces: ['Brown coat', 'Olive hoodie', 'Beige pants'], vibe: '❄️ Warm earth tones' },
+                { name: 'Black Puffer + Burgundy', colors: ['#1A1A1A', '#800020', '#2F2F2F'], pieces: ['Black puffer', 'Burgundy sweater', 'Charcoal jeans'], vibe: '❄️ Modern streetwear' }
+            ],
+            summer: [
+                { name: 'Cream + Sage Green', colors: ['#F5F0E6', '#9BAE91'], pieces: ['Cream linen shirt', 'Sage shorts'], vibe: '☀️ Fresh and breezy' },
+                { name: 'Light Blue + White', colors: ['#B7CFEA', '#FFFFFF', '#C19A6B'], pieces: ['Soft blue polo', 'White shorts', 'Camel loafers'], vibe: '☀️ Clean summer style' },
+                { name: 'Dusty Rose + Light Beige', colors: ['#D8A39D', '#E8DCC3'], pieces: ['Dusty rose tee', 'Light beige linen pants'], vibe: '☀️ Soft aesthetic vibes' }
+            ]
+        };
+
+        function renderPalette() {
+            return `
+                <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 24px; color: #111827;">Your Color Palette</h2>
+                
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #1f2937;">Neutrals (Foundation)</h3>
+                <div class="grid-8" style="margin-bottom: 32px;">
+                    ${colorPalette.neutrals.map(c => `
+                        <div class="color-swatch">
+                            <div class="color-box" style="background-color: ${c.hex};"></div>
+                            <div style="text-align: center;">
+                                <div style="font-weight: 500; font-size: 14px;">${c.name}</div>
+                                <div style="font-size: 12px; color: #6b7280; font-family: monospace;">${c.hex}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #1f2937;">Accents (Personality)</h3>
+                <div class="grid-5">
+                    ${colorPalette.accents.map(c => `
+                        <div class="color-swatch">
+                            <div class="color-box" style="background-color: ${c.hex};"></div>
+                            <div style="text-align: center;">
+                                <div style="font-weight: 500; font-size: 14px;">${c.name}</div>
+                                <div style="font-size: 12px; color: #6b7280; font-family: monospace;">${c.hex}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderOutfits(category, title) {
+            return `
+                <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 24px; color: #111827;">${title}</h2>
+                <div class="grid-3">
+                    ${outfits[category].map(outfit => `
+                        <div class="outfit-card">
+                            <h3 style="font-weight: bold; font-size: 18px; margin-bottom: 12px;">${outfit.name}</h3>
+                            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                                ${outfit.colors.map(color => `
+                                    <div style="width: 64px; height: 64px; background-color: ${color}; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;"></div>
+                                `).join('')}
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                ${outfit.pieces.map(piece => `<div style="font-size: 14px; color: #374151; margin-bottom: 4px;">• ${piece}</div>`).join('')}
+                            </div>
+                            <div style="font-size: 14px; font-weight: 500; color: #9333ea;">${outfit.vibe}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const content = document.getElementById('content');
+            
+            if (tab === 'palette') {
+                content.innerHTML = renderPalette();
+            } else if (tab === 'casual') {
+                content.innerHTML = renderOutfits('casual', 'Casual Outfits (Gen-Z Clean Fits)');
+            } else if (tab === 'business') {
+                content.innerHTML = renderOutfits('business', 'Business Casual Outfits');
+            } else if (tab === 'formal') {
+                content.innerHTML = renderOutfits('formal', 'Formal Outfits (Classy + High Value)');
+            } else if (tab === 'winter') {
+                content.innerHTML = renderOutfits('winter', 'Winter Outfits');
+            } else if (tab === 'summer') {
+                content.innerHTML = renderOutfits('summer', 'Summer Outfits');
+            }
+        }
+
+        function downloadGuide() {
+            const doc = `COMPLETE WARDROBE STYLE GUIDE
+=============================
+
+YOUR COLOR PALETTE
+-----------------
+
+NEUTRALS:
+${colorPalette.neutrals.map(c => `• ${c.name}: ${c.hex}`).join('\n')}
+
+ACCENTS:
+${colorPalette.accents.map(c => `• ${c.name}: ${c.hex}`).join('\n')}
+
+CASUAL OUTFITS
+-------------
+${outfits.casual.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+BUSINESS CASUAL OUTFITS
+----------------------
+${outfits.business.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+FORMAL OUTFITS
+-------------
+${outfits.formal.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+WINTER OUTFITS
+-------------
+${outfits.winter.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+SUMMER OUTFITS
+-------------
+${outfits.summer.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}`;
+
+            const blob = new Blob([doc], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wardrobe-style-guide.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize with palette view
+        showTab('palette');
+    </script>
+</body>
+</html>
