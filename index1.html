@@ -1,0 +1,389 @@
+import React, { useState } from 'react';
+import { Download, Palette, Shirt, Briefcase, Award, Snowflake, Sun } from 'lucide-react';
+
+const WardrobeLookbook = () => {
+  const [activeTab, setActiveTab] = useState('palette');
+
+  const colorPalette = {
+    neutrals: [
+      { name: 'Black', hex: '#1A1A1A' },
+      { name: 'Charcoal', hex: '#2F2F2F' },
+      { name: 'Dark Brown', hex: '#3B2F2F' },
+      { name: 'Navy', hex: '#0A2342' },
+      { name: 'Deep Navy', hex: '#0D1B2A' },
+      { name: 'Cream', hex: '#F5F0E6' },
+      { name: 'White', hex: '#FFFFFF' },
+      { name: 'Light Beige', hex: '#E8DCC3' }
+    ],
+    accents: [
+      { name: 'Olive', hex: '#556B2F' },
+      { name: 'Rust', hex: '#B7410E' },
+      { name: 'Sage Green', hex: '#9BAE91' },
+      { name: 'Dusty Rose', hex: '#D8A39D' },
+      { name: 'Burgundy', hex: '#800020' },
+      { name: 'Deep Burgundy', hex: '#750015' },
+      { name: 'Camel', hex: '#C19A6B' },
+      { name: 'Deep Denim', hex: '#1E3A5F' },
+      { name: 'Soft Blue', hex: '#B7CFEA' }
+    ]
+  };
+
+  const casualOutfits = [
+    {
+      name: 'Olive + Cream (Warm & Trendy)',
+      colors: ['#556B2F', '#F5F0E6'],
+      pieces: ['Olive tee/hoodie', 'Cream/beige pants'],
+      vibe: '🔥 Gen-Z clean aesthetic'
+    },
+    {
+      name: 'Rust + Dark Denim (Warm Pop)',
+      colors: ['#B7410E', '#1E3A5F'],
+      pieces: ['Rust t-shirt', 'Dark blue jeans'],
+      vibe: '🔥 Bold and masculine'
+    },
+    {
+      name: 'Sage Green + Light Beige (Soft)',
+      colors: ['#9BAE91', '#E8DCC3'],
+      pieces: ['Sage shirt', 'Light beige chinos'],
+      vibe: '🔥 Soft, aesthetic vibes'
+    },
+    {
+      name: 'Navy + Charcoal (Clean)',
+      colors: ['#0A2342', '#2F2F2F'],
+      pieces: ['Navy sweatshirt', 'Charcoal joggers'],
+      vibe: '🔥 Minimal and sharp'
+    },
+    {
+      name: 'Dusty Rose + Black (Modern)',
+      colors: ['#D8A39D', '#1A1A1A'],
+      pieces: ['Dusty rose tee', 'Black jeans'],
+      vibe: '🔥 Modern edge'
+    }
+  ];
+
+  const businessCasualOutfits = [
+    {
+      name: 'Navy Blazer + Cream Chinos',
+      colors: ['#0D1B2A', '#F5EBDD', '#556B2F'],
+      pieces: ['Navy blazer', 'Cream shirt', 'Olive chinos'],
+      vibe: '🔥 Professional warmth'
+    },
+    {
+      name: 'Camel Blazer + Navy Pants',
+      colors: ['#C19A6B', '#FFFFFF', '#0A2342'],
+      pieces: ['Camel blazer', 'White shirt', 'Navy pants'],
+      vibe: '🔥 Premium and elegant'
+    },
+    {
+      name: 'Charcoal + Light Blue',
+      colors: ['#2B2B2B', '#B7CFEA'],
+      pieces: ['Charcoal blazer', 'Soft blue shirt', 'Charcoal pants'],
+      vibe: '🔥 CEO energy'
+    }
+  ];
+
+  const formalOutfits = [
+    {
+      name: 'Navy Suit + Cream Shirt',
+      colors: ['#0D1B2A', '#F5EBDD', '#800020'],
+      pieces: ['Navy suit', 'Cream shirt', 'Burgundy tie'],
+      vibe: '🔥 Skin glow + dark hair contrast'
+    },
+    {
+      name: 'Charcoal Suit + Light Blue',
+      colors: ['#2B2B2B', '#B7CFEA', '#0A2342'],
+      pieces: ['Charcoal suit', 'Soft blue shirt', 'Navy tie'],
+      vibe: '🔥 Powerful CEO vibes'
+    },
+    {
+      name: 'Camel Blazer + Navy Pants',
+      colors: ['#C19A6B', '#FFFFFF', '#0A2342'],
+      pieces: ['Camel blazer', 'White shirt', 'Navy pants'],
+      vibe: '🔥 Warm skin tone perfection'
+    },
+    {
+      name: 'Dark Brown Suit + Cream',
+      colors: ['#3B2F2F', '#F7F3E9', '#556B2F'],
+      pieces: ['Dark brown suit', 'Cream shirt', 'Olive tie'],
+      vibe: '🔥 Rich and rare combo'
+    },
+    {
+      name: 'Black Suit + Charcoal Shirt',
+      colors: ['#1A1A1A', '#2F2F2F', '#750015'],
+      pieces: ['Black suit', 'Charcoal shirt', 'Burgundy tie'],
+      vibe: '🔥 Bold masculine power'
+    }
+  ];
+
+  const winterOutfits = [
+    {
+      name: 'Navy Overcoat + Charcoal',
+      colors: ['#0D1B2A', '#2F2F2F', '#F5F0E6'],
+      pieces: ['Navy overcoat', 'Charcoal sweater', 'Cream scarf'],
+      vibe: '❄️ Classic winter elegance'
+    },
+    {
+      name: 'Dark Brown + Olive Layers',
+      colors: ['#3B2F2F', '#556B2F', '#E8DCC3'],
+      pieces: ['Brown coat', 'Olive hoodie', 'Beige pants'],
+      vibe: '❄️ Warm earth tones'
+    },
+    {
+      name: 'Black Puffer + Burgundy',
+      colors: ['#1A1A1A', '#800020', '#2F2F2F'],
+      pieces: ['Black puffer', 'Burgundy sweater', 'Charcoal jeans'],
+      vibe: '❄️ Modern streetwear'
+    }
+  ];
+
+  const summerOutfits = [
+    {
+      name: 'Cream + Sage Green',
+      colors: ['#F5F0E6', '#9BAE91'],
+      pieces: ['Cream linen shirt', 'Sage shorts'],
+      vibe: '☀️ Fresh and breezy'
+    },
+    {
+      name: 'Light Blue + White',
+      colors: ['#B7CFEA', '#FFFFFF', '#C19A6B'],
+      pieces: ['Soft blue polo', 'White shorts', 'Camel loafers'],
+      vibe: '☀️ Clean summer style'
+    },
+    {
+      name: 'Dusty Rose + Light Beige',
+      colors: ['#D8A39D', '#E8DCC3'],
+      pieces: ['Dusty rose tee', 'Light beige linen pants'],
+      vibe: '☀️ Soft aesthetic vibes'
+    }
+  ];
+
+  const ColorSwatch = ({ hex, name }) => (
+    <div className="flex flex-col items-center gap-2">
+      <div 
+        className="w-20 h-20 rounded-lg shadow-md border border-gray-200"
+        style={{ backgroundColor: hex }}
+      />
+      <div className="text-center">
+        <div className="font-medium text-sm">{name}</div>
+        <div className="text-xs text-gray-500 font-mono">{hex}</div>
+      </div>
+    </div>
+  );
+
+  const OutfitCard = ({ outfit }) => (
+    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <h3 className="font-bold text-lg mb-3">{outfit.name}</h3>
+      <div className="flex gap-2 mb-4">
+        {outfit.colors.map((color, idx) => (
+          <div 
+            key={idx}
+            className="w-16 h-16 rounded-lg shadow-sm border border-gray-200"
+            style={{ backgroundColor: color }}
+          />
+        ))}
+      </div>
+      <div className="space-y-2 mb-3">
+        {outfit.pieces.map((piece, idx) => (
+          <div key={idx} className="text-sm text-gray-700">• {piece}</div>
+        ))}
+      </div>
+      <div className="text-sm font-medium text-purple-600">{outfit.vibe}</div>
+    </div>
+  );
+
+  const downloadPDF = () => {
+    const doc = `
+COMPLETE WARDROBE STYLE GUIDE
+=============================
+
+YOUR COLOR PALETTE
+-----------------
+
+NEUTRALS:
+${colorPalette.neutrals.map(c => `• ${c.name}: ${c.hex}`).join('\n')}
+
+ACCENTS:
+${colorPalette.accents.map(c => `• ${c.name}: ${c.hex}`).join('\n')}
+
+CASUAL OUTFITS
+-------------
+${casualOutfits.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+BUSINESS CASUAL OUTFITS
+----------------------
+${businessCasualOutfits.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+FORMAL OUTFITS
+-------------
+${formalOutfits.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+WINTER OUTFITS
+-------------
+${winterOutfits.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+
+SUMMER OUTFITS
+-------------
+${summerOutfits.map(o => `
+${o.name}
+Colors: ${o.colors.join(', ')}
+Pieces: ${o.pieces.join(' + ')}
+${o.vibe}
+`).join('\n')}
+    `.trim();
+
+    const blob = new Blob([doc], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'wardrobe-style-guide.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Complete Lookbook</h1>
+          <p className="text-gray-600">Curated color palette & outfit combinations</p>
+          <button
+            onClick={downloadPDF}
+            className="mt-4 bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center gap-2 mx-auto shadow-lg"
+          >
+            <Download size={20} />
+            Download Style Guide
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 justify-center">
+          {[
+            { id: 'palette', label: 'Color Palette', icon: Palette },
+            { id: 'casual', label: 'Casual', icon: Shirt },
+            { id: 'business', label: 'Business Casual', icon: Briefcase },
+            { id: 'formal', label: 'Formal', icon: Award },
+            { id: 'winter', label: 'Winter', icon: Snowflake },
+            { id: 'summer', label: 'Summer', icon: Sun }
+          ].map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                  activeTab === tab.id
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow'
+                }`}
+              >
+                <Icon size={18} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Content */}
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {activeTab === 'palette' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Your Color Palette</h2>
+              
+              <h3 className="text-xl font-semibold mb-4 text-gray-800">Neutrals (Foundation)</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 mb-8">
+                {colorPalette.neutrals.map((color, idx) => (
+                  <ColorSwatch key={idx} {...color} />
+                ))}
+              </div>
+
+              <h3 className="text-xl font-semibold mb-4 text-gray-800">Accents (Personality)</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {colorPalette.accents.map((color, idx) => (
+                  <ColorSwatch key={idx} {...color} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'casual' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Casual Outfits (Gen-Z Clean Fits)</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {casualOutfits.map((outfit, idx) => (
+                  <OutfitCard key={idx} outfit={outfit} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'business' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Business Casual Outfits</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {businessCasualOutfits.map((outfit, idx) => (
+                  <OutfitCard key={idx} outfit={outfit} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'formal' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Formal Outfits (Classy + High Value)</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {formalOutfits.map((outfit, idx) => (
+                  <OutfitCard key={idx} outfit={outfit} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'winter' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Winter Outfits</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {winterOutfits.map((outfit, idx) => (
+                  <OutfitCard key={idx} outfit={outfit} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'summer' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Summer Outfits</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {summerOutfits.map((outfit, idx) => (
+                  <OutfitCard key={idx} outfit={outfit} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WardrobeLookbook;
